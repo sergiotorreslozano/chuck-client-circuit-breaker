@@ -1,6 +1,6 @@
 resilience4j.circuitbreaker:
-  instances:
-    mycircuitBreaker:
+  configs:
+    default:
       registerHealthIndicator: true
       slidingWindowSize: 100
       permittedNumberOfCallsInHalfOpenState: 3
@@ -9,4 +9,15 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 50s
       failureRateThreshold: 50
       eventConsumerBufferSize: 10
+  instances:
+    mycircuitBreaker:
+      baseConfig: default
+
+management:
+  server:
+    port: 9090
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
