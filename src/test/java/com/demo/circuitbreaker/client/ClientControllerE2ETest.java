@@ -23,8 +23,7 @@ public class ClientControllerE2ETest {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
 
     @Test
     public void chuckJokeWithoutCBTest(){
@@ -37,4 +36,23 @@ public class ClientControllerE2ETest {
         ResponseEntity<ChuckFact> fact = restTemplate.getForEntity("http://localhost:"+ port +"/chuckcb", ChuckFact.class);
         assertNotNull(fact.getBody().getFact());
     }
+
+    @Test
+    public void circuitBreakerTest(){
+        for(int i= 0 ; i<10;i++){
+            makeAGoodRequest();
+        }
+        for(int i= 0 ; i<10;i++){
+            makeABadRequest();
+        }
+    }
+
+    ChuckFact makeAGoodRequest(){
+        return restTemplate.getForEntity("http://localhost:"+ port +"/chuckcb", ChuckFact.class).getBody();
+    }
+
+    ChuckFact makeABadRequest(){
+        return restTemplate.getForEntity("http://localhost:"+ port +"/chuckcb2", ChuckFact.class).getBody();
+    }
+
 }

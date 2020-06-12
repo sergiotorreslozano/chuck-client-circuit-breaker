@@ -1,27 +1,35 @@
 package com.demo.circuitbreaker.client;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.decorators.Decorators;
+import io.vavr.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @RestController
 public class ClientController {
+    private static Logger LOG = LoggerFactory.getLogger(ClientController.class);
 
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private CircuitBreaker circuitBreaker;
 
-    @Value(("${chuck.service.url}"))
-    private String url;
+    @Autowired
+    private IClientService service;
 
     @GetMapping("/hello")
     public String helloworld(){
@@ -32,7 +40,7 @@ public class ClientController {
     public ResponseEntity<ChuckFact> chuckJokeWithoutCB(){
         ResponseEntity<ChuckFact> response;
         try{
-            response = restTemplate.getForEntity(URI.create(url + "/chuck"), ChuckFact.class);
+            response = service.getAChuckFact();
         }catch (HttpStatusCodeException ex){
             response = ResponseEntity.ok(new ChuckFact("Chuck is resting"));
         }
@@ -41,12 +49,29 @@ public class ClientController {
 
     @GetMapping("/chuckcb")
     public ResponseEntity<ChuckFact> chuckJoke(){
-        return circuitBreaker.run(
-                () -> restTemplate.getForEntity(URI.create(url + "/chuck"), ChuckFact.class),
-                throwable -> fallback());
+        Supplier<ResponseEntity<ChuckFact>> decoratedSupplier = CircuitBreaker
+                .decorateSupplier(circuitBreaker,
+                        () -> service.getAChuckFact());
+        ResponseEntity<ChuckFact> result = Try.ofSupplier(decoratedSupplier)
+                .recover(throwable -> fallback(throwable)).get();
+        LOG.info("State: " + circuitBreaker.getState().toString());
+        return result;
     }
 
-    public ResponseEntity<ChuckFact> fallback(){
+
+    @GetMapping("/chuckcb2")
+    public ResponseEntity<ChuckFact> chuckJoke2() throws Exception{
+        Supplier<ResponseEntity<ChuckFact>> decoratedSupplier = CircuitBreaker
+                .decorateSupplier(circuitBreaker,
+                        () -> service.getA500Exception());
+        ResponseEntity<ChuckFact> result = Try.ofSupplier(decoratedSupplier)
+                .recover(throwable -> fallback(throwable)).get();
+        LOG.info("State: " + circuitBreaker.getState().toString());
+        return result;
+    }
+
+    public ResponseEntity<ChuckFact> fallback(Throwable e){
+        LOG.info("Fallback due to exception: " + e.getClass());
         return ResponseEntity.ok(new ChuckFact("Chuck is taking a rest"));
     }
 }
