@@ -3,6 +3,7 @@ package com.demo.circuitbreaker.client;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.circuitbreaker.internal.InMemoryCircuitBreakerRegistry;
 import io.github.resilience4j.micrometer.tagged.TaggedCircuitBreakerMetrics;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.logging.LoggingMeterRegistry;
@@ -38,14 +39,16 @@ public class Config {
         CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
                 .slidingWindow(10,10 , CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
                 .failureRateThreshold(50)
-                .waitDurationInOpenState(Duration.ofSeconds(30))
+                .waitDurationInOpenState(Duration.ofSeconds(3))
                 .permittedNumberOfCallsInHalfOpenState(3)
                 .build();
         return CircuitBreakerRegistry.of(circuitBreakerConfig);
     }
 
 //    @Bean
-//    TaggedCircuitBreakerMetrics taggedCircuitBreakerMetrics(){
+//    public TaggedCircuitBreakerMetrics taggedCircuitBreakerMetrics(){
+////        InMemoryCircuitBreakerRegistry registry =
+//        circuitBreakerRegistry.getAllCircuitBreakers();
 //        MeterRegistry meterRegistry = new SimpleMeterRegistry();
 //        TaggedCircuitBreakerMetrics metrics =TaggedCircuitBreakerMetrics.ofCircuitBreakerRegistry(circuitBreakerRegistry);
 //        metrics.bindTo(meterRegistry);

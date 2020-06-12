@@ -38,12 +38,16 @@ public class ClientControllerE2ETest {
     }
 
     @Test
-    public void circuitBreakerTest(){
+    public void circuitBreakerTest() throws InterruptedException {
         for(int i= 0 ; i<10;i++){
             makeAGoodRequest();
         }
         for(int i= 0 ; i<10;i++){
             makeABadRequest();
+        }
+        Thread.sleep(3000);
+        for(int i= 0 ; i<10;i++){
+            makeAGoodRequest();
         }
     }
 
