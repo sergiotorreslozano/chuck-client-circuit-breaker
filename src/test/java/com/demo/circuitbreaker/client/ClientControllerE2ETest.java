@@ -33,7 +33,7 @@ public class ClientControllerE2ETest {
 
     @Test
     public void chuckJokeWithCBTest(){
-        ResponseEntity<ChuckFact> fact = restTemplate.getForEntity("http://localhost:"+ port +"/chuckcb", ChuckFact.class);
+        ResponseEntity<ChuckFact> fact = restTemplate.getForEntity("http://localhost:"+ port +"/chuckJoke", ChuckFact.class);
         assertNotNull(fact.getBody().getFact());
     }
 
@@ -52,11 +52,11 @@ public class ClientControllerE2ETest {
     }
 
     ChuckFact makeAGoodRequest(){
-        return restTemplate.getForEntity("http://localhost:"+ port +"/chuckcb", ChuckFact.class).getBody();
+        return restTemplate.getForEntity("http://localhost:"+ port +"/chuckJoke", ChuckFact.class).getBody();
     }
 
     ChuckFact makeABadRequest(){
-        return restTemplate.getForEntity("http://localhost:"+ port +"/chuckcb2", ChuckFact.class).getBody();
+        return restTemplate.getForEntity("http://localhost:"+ port +"/chuckException", ChuckFact.class).getBody();
     }
 
 }

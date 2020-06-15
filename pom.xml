@@ -16,12 +16,15 @@
 
 	<properties>
 		<java.version>11</java.version>
+<!--		<spring-cloud.version>Hoxton.SR4</spring-cloud.version>-->
 	</properties>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<version>2.3.0.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -34,11 +37,13 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
+			<version>2.3.0.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>2.3.0.RELEASE</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-micrometer -->
@@ -55,6 +60,7 @@
 			<version>1.5.0</version>
 		</dependency>
 
+
 		<!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-core -->
 		<dependency>
 			<groupId>io.micrometer</groupId>
@@ -64,25 +70,5 @@
 
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

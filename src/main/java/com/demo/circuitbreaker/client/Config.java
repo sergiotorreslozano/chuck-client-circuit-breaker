@@ -47,8 +47,6 @@ public class Config {
 
 //    @Bean
 //    public TaggedCircuitBreakerMetrics taggedCircuitBreakerMetrics(){
-////        InMemoryCircuitBreakerRegistry registry =
-//        circuitBreakerRegistry.getAllCircuitBreakers();
 //        MeterRegistry meterRegistry = new SimpleMeterRegistry();
 //        TaggedCircuitBreakerMetrics metrics =TaggedCircuitBreakerMetrics.ofCircuitBreakerRegistry(circuitBreakerRegistry);
 //        metrics.bindTo(meterRegistry);
