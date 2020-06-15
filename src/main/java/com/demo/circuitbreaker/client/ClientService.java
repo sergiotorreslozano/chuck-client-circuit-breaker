@@ -39,8 +39,6 @@ public class ClientService implements IClientService {
                 "When Chuck Norris turned 18, his parents moved out");
         repository.put(9,
                 "When Chuck Norris swims in the ocean, the sharks are in a steel cage");
-        repository.put(20,
-                "Chuck Norris will never have a heart attack. His heart isn't nearly foolish enough to attack him");
         repository.put(10, "Chuck Norris counted to infinity… twice");
         repository.put(12, "Chuck Norris can speak Braille");
         repository.put(13, "Chuck Norris once won a game of Connect Four in three moves");
@@ -50,6 +48,7 @@ public class ClientService implements IClientService {
         repository.put(17, "Chuck Norris can build a snowman out of rain");
         repository.put(18, "When Chuck Norris enters a room, he doesn’t turn the lights on, he turns the dark off");
         repository.put(19, "Chuck Norris can tie his shoes with his feet");
+        repository.put(20, "Chuck Norris will never have a heart attack. His heart isn't nearly foolish enough to attack him");
     }
 
     public <T> ResponseEntity<T> getA500Exception() {
@@ -59,8 +58,8 @@ public class ClientService implements IClientService {
 
     public <T> ResponseEntity<T> getAChuckFact(){
         LOG.info("I'm returning a test Joke");
-        Integer key = r.nextInt();
-        return (ResponseEntity<T>) ResponseEntity.ok(new ChuckFact(key,repository.get(key)));
+        Integer key = r.nextInt(20) + 1; // value should be between 1 and 20
+        return (ResponseEntity<T>) ResponseEntity.ok(new ChuckFact(key, repository.get(key)));
     }
 
 }
