@@ -58,6 +58,10 @@ public class ClientController {
         return result;
     }
 
+    ResponseEntity<ChuckFact> fallback(Throwable e){
+        LOG.info("Fallback due to exception: " + e.getClass());
+        return ResponseEntity.ok(new ChuckFact("Chuck is taking a rest"));
+    }
 
     @GetMapping("/chuckException")
     public ResponseEntity<ChuckFact> chuckJoke2() throws Exception{
@@ -70,10 +74,7 @@ public class ClientController {
         return result;
     }
 
-    public ResponseEntity<ChuckFact> fallback(Throwable e){
-        LOG.info("Fallback due to exception: " + e.getClass());
-        return ResponseEntity.ok(new ChuckFact("Chuck is taking a rest"));
-    }
+
 }
 
 
