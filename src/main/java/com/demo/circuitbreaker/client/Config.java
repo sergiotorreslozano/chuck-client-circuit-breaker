@@ -45,15 +45,13 @@ public class Config {
         return CircuitBreakerRegistry.of(circuitBreakerConfig);
     }
 
-//    @Bean
-//    public TaggedCircuitBreakerMetrics taggedCircuitBreakerMetrics(){
-////        InMemoryCircuitBreakerRegistry registry =
-//        circuitBreakerRegistry.getAllCircuitBreakers();
-//        MeterRegistry meterRegistry = new SimpleMeterRegistry();
-//        TaggedCircuitBreakerMetrics metrics =TaggedCircuitBreakerMetrics.ofCircuitBreakerRegistry(circuitBreakerRegistry);
-//        metrics.bindTo(meterRegistry);
-//        return metrics;
-//    }
+    @Bean
+    public TaggedCircuitBreakerMetrics taggedCircuitBreakerMetrics(){
+        MeterRegistry meterRegistry = new SimpleMeterRegistry();
+        TaggedCircuitBreakerMetrics metrics =TaggedCircuitBreakerMetrics.ofCircuitBreakerRegistry(circuitBreakerRegistry);
+        metrics.bindTo(meterRegistry);
+        return metrics;
+    }
 
 }
 

@@ -47,7 +47,7 @@ public class ClientController {
         return response;
     }
 
-    @GetMapping("/chuckcb")
+    @GetMapping("/chuckJoke")
     public ResponseEntity<ChuckFact> chuckJoke(){
         Supplier<ResponseEntity<ChuckFact>> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker,
@@ -59,7 +59,7 @@ public class ClientController {
     }
 
 
-    @GetMapping("/chuckcb2")
+    @GetMapping("/chuckException")
     public ResponseEntity<ChuckFact> chuckJoke2() throws Exception{
         Supplier<ResponseEntity<ChuckFact>> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker,
