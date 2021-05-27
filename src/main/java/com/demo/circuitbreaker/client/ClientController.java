@@ -64,7 +64,7 @@ public class ClientController {
     }
 
     @GetMapping("/chuckException")
-    public ResponseEntity<ChuckFact> chuckJoke2() throws Exception{
+    public ResponseEntity<ChuckFact> chuckJokeException() {
         Supplier<ResponseEntity<ChuckFact>> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker,
                         () -> service.getA500Exception());

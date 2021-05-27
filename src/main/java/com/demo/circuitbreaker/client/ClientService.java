@@ -40,6 +40,7 @@ public class ClientService implements IClientService {
         repository.put(9,
                 "When Chuck Norris swims in the ocean, the sharks are in a steel cage");
         repository.put(10, "Chuck Norris counted to infinity… twice");
+        repository.put(11, "Chuck Norris does not sleep. He waits");
         repository.put(12, "Chuck Norris can speak Braille");
         repository.put(13, "Chuck Norris once won a game of Connect Four in three moves");
         repository.put(14, "The dark is afraid of Chuck Norris");

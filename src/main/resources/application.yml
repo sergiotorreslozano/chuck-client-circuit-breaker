@@ -5,4 +5,11 @@ management:
     web:
       exposure:
         include: "*"
+    health:
+      show-details: always
 
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:7070
