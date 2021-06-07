@@ -13,3 +13,5 @@ spring:
     admin:
       client:
         url: http://localhost:7070
+        instance:
+          name: chuck-client-circuit-breaker
