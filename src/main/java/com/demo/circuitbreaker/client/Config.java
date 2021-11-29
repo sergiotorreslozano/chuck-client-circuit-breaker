@@ -41,6 +41,7 @@ public class Config {
                 .failureRateThreshold(50)
                 .waitDurationInOpenState(Duration.ofSeconds(3))
                 .permittedNumberOfCallsInHalfOpenState(3)
+                .minimumNumberOfCalls(10)
                 .build();
         return CircuitBreakerRegistry.of(circuitBreakerConfig);
     }
