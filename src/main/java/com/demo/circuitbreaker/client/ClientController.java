@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,38 +41,45 @@ public class ClientController {
     public ResponseEntity<ChuckFact> chuckJokeWithoutCB(){
         ResponseEntity<ChuckFact> response;
         try{
-            response = service.getAChuckFact();
+            response = ResponseEntity.ok(service.getAChuckFact());
         }catch (HttpStatusCodeException ex){
-            response = ResponseEntity.ok(new ChuckFact("Chuck is resting"));
+            response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ChuckFact("Chuck is taking a rest"));
         }
         return response;
     }
 
     @GetMapping("/chuckJoke")
     public ResponseEntity<ChuckFact> chuckJoke(){
-        Supplier<ResponseEntity<ChuckFact>> decoratedSupplier = CircuitBreaker
+        Supplier<ChuckFact> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker,
                         () -> service.getAChuckFact());
-        ResponseEntity<ChuckFact> result = Try.ofSupplier(decoratedSupplier)
-                .recover(throwable -> fallback(throwable)).get();
+        ResponseEntity<ChuckFact> result = ResponseEntity
+                .status(HttpStatus.OK)
+                .body((Try.ofSupplier(decoratedSupplier)).recover(throwable -> fallback(throwable)).get());
         LOG.info("State: " + circuitBreaker.getState().toString());
         return result;
     }
 
-    ResponseEntity<ChuckFact> fallback(Throwable e){
+    ChuckFact fallback(Throwable e){
         LOG.info("Fallback due to exception: " + e.getClass());
-        return ResponseEntity.ok(new ChuckFact("Chuck is taking a rest"));
+        return new ChuckFact("Chuck is taking a rest");
     }
 
     @GetMapping("/chuckException")
     public ResponseEntity<ChuckFact> chuckJokeException() {
-        Supplier<ResponseEntity<ChuckFact>> decoratedSupplier = CircuitBreaker
+        Supplier<ChuckFact> decoratedSupplier = CircuitBreaker
                 .decorateSupplier(circuitBreaker,
                         () -> service.getA500Exception());
-        ResponseEntity<ChuckFact> result = Try.ofSupplier(decoratedSupplier)
-                .recover(throwable -> fallback(throwable)).get();
+        ResponseEntity<ChuckFact> result = ResponseEntity.status(HttpStatus.OK)
+                .body(Try.ofSupplier(decoratedSupplier).recover(throwable -> fallback(throwable)).get());
         LOG.info("State: " + circuitBreaker.getState().toString());
         return result;
+    }
+
+    @GetMapping ("/joke")
+    public ResponseEntity<ChuckFact> joke(){
+        ResponseEntity<ChuckFact> response = ResponseEntity.ok(new ChuckFact());
+        return response;
     }
 
 

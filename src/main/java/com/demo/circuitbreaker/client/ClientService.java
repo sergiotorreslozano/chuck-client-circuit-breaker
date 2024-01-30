@@ -52,15 +52,20 @@ public class ClientService implements IClientService {
         repository.put(20, "Chuck Norris will never have a heart attack. His heart isn't nearly foolish enough to attack him");
     }
 
-    public <T> ResponseEntity<T> getA500Exception() {
+    public ChuckFact getA500Exception() {
         LOG.info("I'm going to throw a exception :) ");
         throw new RuntimeException("Circuit breaker forced exception");
     }
 
-    public <T> ResponseEntity<T> getAChuckFact(){
+    public ChuckFact getAChuckFact(){
         LOG.info("I'm returning a test Joke");
         Integer key = r.nextInt(20) + 1; // value should be between 1 and 20
-        return (ResponseEntity<T>) ResponseEntity.ok(new ChuckFact(key, repository.get(key)));
+        return new ChuckFact(key, repository.get(key));
+    }
+
+    @Override
+    public ChuckFact tellAJoke() {
+        return new ChuckFact();
     }
 
 }

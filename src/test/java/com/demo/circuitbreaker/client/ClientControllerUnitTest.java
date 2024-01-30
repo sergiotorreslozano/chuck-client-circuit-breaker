@@ -15,7 +15,7 @@ public class ClientControllerUnitTest {
 
     @Test
     public void fallbackTest(){
-        ResponseEntity<ChuckFact> responseEntity = controller.fallback(new RuntimeException());
-        assertNotNull(responseEntity.getBody().getFact());
+        ChuckFact chuckFact = controller.fallback(new RuntimeException());
+        assertNotNull(chuckFact.getFact());
     }
 }
